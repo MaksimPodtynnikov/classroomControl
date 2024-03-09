@@ -1,0 +1,35 @@
+﻿@{
+	ViewData["Title"] = "Создание объекта";
+}
+
+@model GroupViewModel
+
+<div asp-validation-summary="All" style="font-size:18px;" class="text-danger "></div>
+@using (Html.BeginForm("Create", "Groups", FormMethod.Post, new { enctype = "multipart/form-data", runat = "server" }))
+{
+	<p>
+		Введите название: <br/>
+		<input asp-for="title" required/>
+	</p>
+	<p>
+		Введите направление <br />
+		<input asp-for="direction" required/>
+	</p>
+	<p>
+		Введите факультет <br />
+		<input asp-for="faculty" required/>
+	</p>
+	<p>
+		Введите дату начала <br />
+		<input asp-for="yearStart" required type="month" value="@DateTime.Now.ToString("yyyy")-@DateTime.Now.ToString("MM")" />
+	</p>
+	<p>
+		Введите дату окончания <br />
+		<input asp-for="yearEnd" required type="month" value="@DateTime.Now.ToString("yyyy")-@DateTime.Now.ToString("MM")" />
+	</p>
+	<p>
+		Выберите университет:<br />
+		@Html.DropDownList("universityId", new SelectList(Model.AllUniversities, "id", "title"), new { required = true })
+	</p>
+	<p><input type="submit" value="Создать" /></p>
+}

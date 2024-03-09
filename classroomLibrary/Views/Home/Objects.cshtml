@@ -1,0 +1,24 @@
+﻿@{
+	ViewData["Title"] = "Администрирование объектов";
+}
+
+<div>
+	<a class="nav-link text-light" asp-area="" asp-controller="Departments" asp-action="Index">Отделы</a>
+	<a class="nav-link text-light" asp-area="" asp-controller="Cities" asp-action="Index">Города</a>
+	<a class="nav-link text-light" asp-area="" asp-controller="Classrooms" asp-action="Index">Классы</a>
+	<a class="nav-link text-light" asp-area="" asp-controller="Groups" asp-action="Index">Группы</a>
+	<a class="nav-link text-light" asp-area="" asp-controller="Environments" asp-action="Index">Оборудование</a>
+	@if (User.IsInRole("Admin"))
+	{
+		<a class="nav-link text-light" asp-area="" asp-controller="Workers" asp-action="Index">Сотрудники</a>
+	}
+	<a class="nav-link text-light" asp-area="" asp-controller="Students" asp-action="Index">Студенты</a>
+	<a class="nav-link text-light" asp-area="" asp-controller="Events" asp-action="Index">Мероприятия</a>
+	<a class="nav-link text-light" asp-area="" asp-controller="Posts" asp-action="Index">Должности</a>
+	@using (Html.BeginForm("SendEnviroments", "Classrooms", FormMethod.Get))
+	{
+		<label for="title">Название файла:</label>
+		<input id="title" type="text" name="title" value="" />
+		<input class="btn btn-danger" type="submit" value="Выгрузить аудиторное обеспечение" />
+	}
+</div>

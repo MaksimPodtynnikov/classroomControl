@@ -1,0 +1,7 @@
+﻿@model List<Classroom>
+@{
+	foreach (Classroom classroom in Model)
+	{
+		@await Html.PartialAsync("Element/Classroom", classroom)
+	}
+}

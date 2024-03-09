@@ -1,0 +1,25 @@
+﻿@using classroomLibrary.ViewModels;
+@using classroomLibrary.Domain.Enum;
+@model EventsViewModel
+@{
+    ViewData["Title"] = "Свободные аудитории";
+}
+
+        <div id="dateChg" class="table-responsive">
+            @await Html.PartialAsync("Lists/EventTable",Model)
+        </div>
+        <div id="pager" class="pager">
+            <form>
+                <img src="~/img/first.png" class="first" />
+        <img src="~/img/prev.png" class="prev" />
+                <input type="text" class="pagedisplay" />
+        <img src="~/img/next.png" class="next" />
+        <img src="~/img/last.png" class="last" />
+                <select class="pagesize">
+                    <option selected="selected" value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                    <option value="8">8</option>
+                </select>
+            </form>
+        </div>

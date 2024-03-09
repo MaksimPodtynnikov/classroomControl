@@ -1,0 +1,30 @@
+﻿@{
+	ViewData["Title"] = "Создание объекта";
+}
+
+@model ClassViewModel
+
+<div asp-validation-summary="All" style="font-size:18px;" class="text-danger "></div>
+@using (Html.BeginForm("Create", "Classrooms", FormMethod.Post, new { enctype = "multipart/form-data", runat = "server" }))
+{
+	<p>
+		Введите название аудитории: <br/>
+		<input asp-for="title" required />
+	</p>
+	<p>
+		Введите вместительность:<br />
+		<input asp-for="capacity" required />
+	</p>
+	<p>
+		Введите описание:<br />
+		<textarea asp-for="description" />
+	</p>
+	<p>
+		Выберите отдел:<br />
+		@Html.DropDownList("departmentId", new SelectList(Model.AllDepartments, "id", "title"), new { required = true })
+	</p>
+	<p>
+		<input asp-for="image" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" />
+	</p>
+	<p><input type="submit" value="Создать" /></p>
+}

@@ -1,0 +1,18 @@
+﻿@{
+	ViewData["Title"] = "Город";
+}
+
+@model CityViewModel
+
+<h2>@Model.title - @Model.city</h2>
+<p>Филиалы:</p>
+<p>
+	<ul>
+		@{
+			foreach (Department department in Model.departments)
+			{
+				<li>@department.title</li>
+			}
+		}
+	</ul>
+</p>

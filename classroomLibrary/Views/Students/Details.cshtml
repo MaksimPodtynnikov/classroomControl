@@ -1,0 +1,9 @@
+﻿@{
+	ViewData["Title"] = "Студент";
+}
+
+@model StudentViewModel
+
+<h2>ФИО: @Model.getNameShort()</h2>
+<p>Обучается в группе @Model.group.title</p>
+<p>Telegram: @Model.telegram_id</p>

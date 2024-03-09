@@ -1,0 +1,7 @@
+﻿@model List<Group>
+@{
+	foreach (Group group in Model)
+	{
+		@await Html.PartialAsync("Element/Group", group)
+	}
+}

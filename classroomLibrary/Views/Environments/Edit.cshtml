@@ -1,0 +1,18 @@
+﻿@{
+	ViewData["Title"] = "Изменение объекта";
+}
+
+@model EnvironmentViewModel
+<div asp-validation-summary="All" style="font-size:18px;" class="text-danger "></div>
+@using (Html.BeginForm("Edit", "Environments", FormMethod.Post, new { enctype = "multipart/form-data", runat = "server" }))
+{
+	<input type="hidden" asp-for="id" />
+	<p>
+		Название: <br />
+		<input asp-for="title" required/>
+		<br />
+		Описание:<br />
+		<input asp-for="description" /><br />
+	</p>
+	<p><input type="submit" value="Сохранить изменения" /></p>
+}

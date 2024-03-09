@@ -1,0 +1,14 @@
+﻿@model GroupViewModel
+
+<h2>Группа @Model.title</h2>
+<p>Факультет @Model.faculty (@Model.direction)</p>
+<p>Годы: @Model.yearStart - @Model.yearEnd</p>
+<p><ul>
+	@{
+		foreach(Student student in Model.students)
+		{
+			<li>@student.getNameShort()</li>
+		}
+	}
+	</ul>
+</p>

@@ -1,0 +1,62 @@
+﻿@{
+	ViewData["Title"] = "Изменение объекта";
+}
+
+@model EventViewModel
+
+<div asp-validation-summary="All" style="font-size:18px;" class="text-danger "></div>
+@using (Html.BeginForm("Edit", "Events", FormMethod.Post, new { enctype = "multipart/form-data", runat = "server" }))
+{
+	<input type="hidden" asp-for="id" />
+	<table>
+		<tbody>
+			<tr>
+				<td>
+		Введите название: <br />
+		<input asp-for="title" required/><br />
+		Введите тип мероприятия:<br />
+		<input asp-for="type" required/><br />
+		Выберите время начала:<br />
+		<input asp-for="date" required type="date" /><br />
+		Выберите время проведения занятия:<br />
+		<select asp-for="lessonNumber">
+			<option value="1">8:30 - 10:05</option>
+			<option value="2">10:15 - 11:50</option>
+			<option value="3">12:10 - 13:45</option>
+			<option value="4">13:55 - 15:30</option>
+			<option value="5">15:50 - 17:25</option>
+			<option value="6">17:35 - 19:10</option>
+		</select><br />
+		Выберите сотрудника:<br />
+		@Html.DropDownListFor(c => c.workerId, new SelectList(Model.AllWorkers, "id", null), new { required = true })<br />
+		Выберите класс:<br />
+		@Html.DropDownListFor(c => c.classroomId, new SelectList(Model.AllClassrooms, "id", "title"), new { required = true })
+				</td>
+				<td>
+					Группы, записанные на мероприятие:<br />
+					<select multiple class="js-selectize" asp-for="eventGroupsId" id="grSel" placeholder="Выберите группы">
+						@if (Model.AllGroups != null)
+							@foreach (Group group in Model.AllGroups)
+							{
+								if (Model.eventGroups.Select(c => c.group).Contains(group))
+								{
+									<option selected value="@group.id">@group.title</option>
+								}
+								else
+								{
+									<option value="@group.id">@group.title</option>
+								}
+								
+							}
+					</select>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<p><input type="submit" value="Сохранить изменения" /></p>
+}
+<script>
+	$(document).ready(function () {
+		$('.js-selectize').selectize();
+	});
+</script>

@@ -1,0 +1,32 @@
+﻿@model Classroom
+<tr id="@Model.id">
+	<td>
+		@Model.title
+	</td>
+	<td>
+		@if (Model.photo != null && Model.photo != "")
+		{
+			<img class="img-thumbnail" src="@Model.photo" alt="@Model.title" style="min-width: 200px; max-width:200px;" />
+		}
+	</td>
+	<td>
+		@Model.department.title
+	</td>
+	<td>
+		@Model.capacity
+	</td>
+		<td>
+			<a class="btn btn-warning" href="Classrooms/Details/@Model.id" style="margin-block-end:5px"><img src="~/img/details.png" /></a>
+		@if (User.IsInRole("Admin"))
+		{
+			<a class="btn btn-warning" href="Classrooms/Edit/@Model.id" style="margin-block-end:5px"><img src="~/img/edit.png" /></a>
+			<button class="btn btn-warning mt-sm-1 mt-md-0" id="delete_@Model.id" style="margin-block-end:5px"><img src="~/img/delete.png" /></button>
+		}
+		</td>
+</tr>
+@if (User.IsInRole("Admin"))
+{
+	<script>
+		document.getElementById("delete_@Model.id").addEventListener("click", async () => await deleteObj(@Model.id));
+	</script>
+}

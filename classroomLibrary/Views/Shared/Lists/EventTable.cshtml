@@ -1,0 +1,149 @@
+﻿@using classroomLibrary.ViewModels;
+@using classroomLibrary.Domain.Enum;
+@model EventsViewModel
+<style>
+    td {
+        text-align: center;
+        vertical-align: middle;
+        transition: 0s background-color;
+    }
+    .td_el:hover{
+            background-color: #5488af;
+    }
+    th{
+        width: 15%;
+    }
+</style>
+<table border="1" class="table table-striped table-bordered tablesorter-dark" id="myTable">
+    <caption style="caption-side: top">Список классов</caption>
+    <thead class="thead-light">
+        <tr>
+            <th scope="col"><input type="date" id="dateTime" asp-for="date" onchange="changeDate()" /></th>
+            <th scope="col">8:30 - 10:05</th>
+            <th scope="col">10:15 - 11:50</th>
+            <th scope="col">12:10 - 13:45</th>
+            <th scope="col">13:55 - 15:30</th>
+            <th scope="col">15:50 - 17:25</th>
+            <th scope="col">17:35 - 19:10</th>
+        </tr>
+    </thead>
+    <tbody id="objList">
+        @{
+            foreach (Classroom classroom in Model.AllClassrooms)
+            {
+                                    <tr id="cl_@classroom.id">
+                                        <td scope="row">@classroom.title</td>
+                                        @for (int i = 1; i < 7; i++)
+                    {
+                        if (classroom.events != null)
+                        {
+                                                @if (classroom.events.Where(c => c.lessonNumber == i && c.date == Model.date.Date).Any())
+                            {
+                                var cls = classroom.events.Single(c => c.lessonNumber == i && c.date == Model.date.Date);
+                                string idst = $"{@classroom.id}_{@i}";
+                                                    <td class="td_el" name="lessonNumber=@i&classroom=@classroom.id" style="white-space: pre-line;" id="@idst">@cls.ToString()
+                                                        @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                                    {
+                                                            <button id="delete_@cls.id" class="btn btn-danger">X</button>
+                                                            <script>
+                                                                document.addEventListener('reloadDate', () => {
+                                                                    document.getElementById("delete_@cls.id").addEventListener("click", async () => await deleteObj(@cls.id));
+                                                                });
+                                                            </script>
+                                    }
+                                                    </td>
+                            }
+                            else
+                            {
+                                string idst = $"{@classroom.id}_{@i}";
+                                                    <td class="td_el" id="@idst" name="lessonNumber=@i&classroom=@classroom.id"><span>+</span></td>
+                                                    <script>
+                                        document.addEventListener('reloadDate', () => {
+                                            document.getElementById("@idst").addEventListener("click", function () {
+                                                createEvent(this);
+                                            });
+                                        });
+                                                    </script>
+                            }
+                        }
+                        else
+                        {
+                            string idst = $"{@classroom.id}_{@i}";
+                                                <td class="td_el" id="@idst" name="lessonNumber=@i&classroom=@classroom.id"><span>+</span></td>
+                                                <script>
+                                                    document.addEventListener('reloadDate', () => {
+                                                        document.getElementById("@idst").addEventListener("click", function () {
+                                                            createEvent(this);
+                                                        });
+                                                    });
+                                                </script>
+                        }
+                    }
+                                    </tr>
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        document.dispatchEvent(new CustomEvent("reloadDate", {
+            bubbles: true
+        }));
+    });
+    document.addEventListener('reloadDate', () => {
+        $("#myTable").tablesorter({
+            widgets: ['zebra'],
+            debug: true,
+            widthFixed: true
+        }).tablesorterPager({
+            size: 2,
+            container: $('#pager'),
+            positionFixed: false,
+            page: 1,
+            cssNext: '.next',
+            cssPrev: '.prev',
+            cssPrev: '.first',
+            cssPrev: '.last',
+        });
+    });
+    function changeDate() {
+        var dateTime = document.getElementById("dateTime");
+        $.ajax({
+            type: 'POST',
+            url: 'Classrooms?date=' + dateTime.value,
+            success: function (response) {
+                document.getElementById("dateChg").innerHTML = response;
+                document.dispatchEvent(new CustomEvent("reloadDate", {
+                    bubbles: true
+                }));
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+    async function deleteObj(id) {
+        const response = await fetch(`Delete/` + id, {
+            method: "DELETE",
+            headers: { "Accept": "application/json" }
+        });
+        if (response.ok === true) {
+            const user = await response.json();
+            var elem = document.getElementById("delete_" + id);
+            var parent = elem.parentElement;
+            parent.innerHTML = "+";
+            var script = document.createElement("script");
+            script.text = 'document.getElementById("' + parent.id+ '").addEventListener("click", function () {createEvent(this);});';
+            parent.appendChild(script);
+        }
+        else {
+            const error = await response.json();
+            console.log(error.message);
+        }
+    }
+    function createEvent(e) {
+        var date = document.getElementById("dateTime").value;
+        var url = 'Create?' + e.attributes.name.nodeValue + '&date=' + date;
+        window.location.href = url;
+    }
+</script>

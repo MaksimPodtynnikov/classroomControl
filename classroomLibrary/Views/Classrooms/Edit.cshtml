@@ -1,0 +1,133 @@
+﻿@{
+	ViewData["Title"] = "Изменение объекта";
+}
+
+@model ClassViewModel
+
+<div asp-validation-summary="All" style="font-size:18px;" class="text-danger "></div>
+@using (Html.BeginForm("Edit", "Classrooms", FormMethod.Post, new { enctype = "multipart/form-data", runat = "server" }))
+{
+	<input type="hidden" asp-for="id" />
+	<table>
+		<tbody>
+			<tr>
+				<td>
+					Название аудитории: <br />
+					<input asp-for="title" required/>
+					<br/>
+					Вместительность:<br />
+					<input asp-for="capacity" required/><br/>
+					Введите описание:<br />
+					<textarea asp-for="description" /><br />
+					Отдел:<br />
+					@Html.DropDownListFor(m => m.departmentId, new SelectList(Model.AllDepartments, "id", "title"), new { required = true })
+				</td>
+				<td>
+					События:<br />
+					@Html.ListBox("event", new SelectList(Model.events != null ? Model.events : Enumerable.Empty<Event>(), "id", "title"), new { id = "eventsList" })
+					<input type="button" id="delEvent" value="Удалить выбранные события" />
+				</td>		
+			</tr>
+			<tr>
+				<td>
+					Фото:<br />
+					<img class="img-thumbnail" width="100" src="@Model.photo" id="photo" alt="@Model.title" />
+					<input asp-for="image" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" id="photoInput" onchange="readFile()" />
+				</td>
+				<td>
+					Оборудование:<br />
+					@Html.ListBox("environment", new SelectList(Model.classEnvironments != null ? Model.classEnvironments : Enumerable.Empty<ClassEnvironment>(), "id", null), new { id = "environmentList" })
+					<input type="button" value="Удалить выбранное оборудование" id="delEnv" />
+					<br />
+					Доступное оборудование:<br />
+					@Html.DropDownList("environment1", new SelectList(Model.AllEnviroments != null ? Model.AllEnviroments : Enumerable.Empty<Enviroment>(), "id", "title"), new { id = "environment1List" })
+					<input type="number" id="environmentCount" value="1" min="1" max="50" />
+					<input type="button" value="Добавить в класс" id="addEnv"/>
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
+	<p><input type="submit" value="Сохранить изменения" /></p>
+}
+<script>
+	document.getElementById("addEnv").addEventListener("click", async () => await addToClass());
+	document.getElementById("delEnv").addEventListener("click", async () => await deleteEnvironment());
+	document.getElementById("delEvent").addEventListener("click", async () => await deleteEvent());
+	function readFile(input) {
+		var selectedFile = document.getElementById('photoInput').files[0];
+		var img = document.getElementById('photo')
+
+		var reader = new FileReader();
+		reader.onload = function () {
+			img.src = this.result
+		}
+		reader.readAsDataURL(selectedFile);
+	}
+
+
+	async function deleteEvent() {
+		var eventsList = document.getElementById('eventsList');
+		var eventValue = eventsList.value;
+		const response = await fetch('/Classrooms/DeleteEvent/' + eventValue, {
+			method: "DELETE",
+			headers: {
+				"Accept": "application/json", "Content-Type": "application/json"
+			},
+		});
+		if (response.ok === true) {
+			var listLength = eventsList.options.length;
+			if (eventsList.selectedIndex > -1)
+				eventsList.remove(eventsList.selectedIndex);
+		}
+		else {
+			const error = await response.json();
+			console.log(error.message);
+		}
+	}
+	async function deleteEnvironment() {
+		var environmentList = document.getElementById('environmentList');
+		var environmentValue = environmentList.value;
+		const response = await fetch('/Classrooms/DeleteEnviroment/' + environmentValue, {
+			method: "DELETE",
+			headers: {
+				"Accept": "application/json", "Content-Type": "application/json"
+			},
+		});
+		if (response.ok === true) {
+			var listLength = environmentList.options.length;
+			if (environmentList.selectedIndex>-1)
+				environmentList.remove(environmentList.selectedIndex);
+		}
+		else {
+			const error = await response.json();
+			console.log(error.message);
+		}
+	}
+	async function addToClass() {
+		var environmentList = document.getElementById('environment1List');
+		var environmentCount = document.getElementById('environmentCount').value;
+		var environmentValue = environmentList.value;
+		if (environmentCount != '') {
+			var environmentText = environmentList.options[environmentList.selectedIndex].text;
+			const response = await fetch('/Classrooms/AddEnviroment', {
+				method: "POST",
+				headers: {
+					"Accept": "application/json", "Content-Type": "application/json"
+				},
+				body: JSON.stringify({ enviromentId: environmentValue, count: environmentCount, classroomId: @Model.id })
+			});
+			if (response.ok === true) {
+				const envCl = await response.json();
+				var opt = document.createElement("option");
+				opt.text = envCl.enviroment + ' (' + envCl.count + ')';
+				opt.value = envCl.id;
+				document.getElementById("environmentList").options.add(opt);
+			}
+			else {
+				const error = await response.json();
+				console.log(error.message);
+			}
+		}
+	}
+</script>

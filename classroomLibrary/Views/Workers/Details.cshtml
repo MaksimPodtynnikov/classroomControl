@@ -1,0 +1,22 @@
+﻿@{
+	ViewData["Title"] = "Сотрудник";
+}
+
+@model WorkerViewModel
+
+
+<h2>ФИО: @Model.getNameShort()</h2>
+<ul>
+	<li>
+		Почта: @Model.mail
+	</li>
+	<li>
+		Телефон: @Model.phone
+	</li>
+	<li>
+		Логин: @Model.login
+	</li>
+	<li>
+		Должность: @Model.post
+	</li>
+</ul>

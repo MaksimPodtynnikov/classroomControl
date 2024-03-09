@@ -1,0 +1,24 @@
+﻿@{
+	ViewData["Title"] = "Изменение объекта";
+}
+
+@model StudentViewModel
+
+<div asp-validation-summary="All" style="font-size:18px;" class="text-danger "></div>
+@using (Html.BeginForm("Edit", "Students", FormMethod.Post, new { enctype = "multipart/form-data", runat = "server" }))
+{
+	<input type="hidden" asp-for="id" />
+	<p>
+		Введите имя: <br />
+		<input asp-for="name" required/><br />
+		Введите фамилию: <br />
+		<input asp-for="family" required/><br />
+		Введите отчество: <br />
+		<input asp-for="patronymic" /><br />
+		Введите телеграм: <br />
+		<input asp-for="telegram_id" /><br />
+		Выбирете группу: <br />
+		@Html.DropDownListFor(c => c.groupId, new SelectList(Model.AllGroups, "id", "title"), new { required = true })
+	</p>
+	<p><input type="submit" value="Сохранить изменения" /></p>
+}

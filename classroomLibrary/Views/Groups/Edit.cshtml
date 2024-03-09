@@ -1,0 +1,31 @@
+﻿@{
+	ViewData["Title"] = "Изменение объекта";
+}
+
+@model GroupViewModel
+
+<div asp-validation-summary="All" style="font-size:18px;" class="text-danger "></div>
+@using (Html.BeginForm("Edit", "Groups", FormMethod.Post, new { enctype = "multipart/form-data", runat = "server" }))
+{
+	<input type="hidden" asp-for="id" />
+	<p>
+		Название: <br />
+		<input asp-for="title" required/>
+		<br />
+		Направление:<br />
+		<input asp-for="direction" required/>
+		<br />
+		Факультет:<br />
+		<input asp-for="faculty" required/>
+		<br />
+		Дата начала:<br />
+		<input asp-for="yearStart" required type="month" value="@DateTime.Now.ToString("yyyy")-@DateTime.Now.ToString("MM")" />
+		<br />
+		Дата окончания:<br />
+		<input asp-for="yearEnd" required type="month" value="@DateTime.Now.ToString("yyyy")-@DateTime.Now.ToString("MM")" />
+		<br />
+		Университет:<br />
+		@Html.DropDownListFor(m => m.universityId, new SelectList(Model.AllUniversities, "id", "title"), new { required = true })
+	</p>
+	<p><input type="submit" value="Сохранить изменения" /></p>
+}

@@ -1,0 +1,7 @@
+﻿@model List<City>
+@{
+    foreach (City city in Model)
+    {
+        @await Html.PartialAsync("Element/City", city)
+    }
+}

@@ -1,0 +1,20 @@
+﻿@model List<Event>
+@{
+	DateTime currentDay = DateTime.Today.AddDays(-1);
+	if (Model != null)
+		foreach (Event evento in Model.OrderBy(c => c.lessonNumber))
+		{
+			if (evento.date.Date > currentDay)
+			{
+				currentDay = evento.date.Date;
+				<hr>
+				<h3> @currentDay.Date.ToString("d") </h3>
+				;
+			}
+			<p>
+				@evento.title - @evento.type (@evento.classroom.title) <br />
+				<b>@evento.getLesson() </b><br />
+				@evento.worker.getNameShort()
+			</p>
+		}
+}

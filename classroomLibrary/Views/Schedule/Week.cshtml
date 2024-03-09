@@ -1,0 +1,42 @@
+﻿@{
+	ViewData["Title"] = "Расписание для студентов";
+}
+
+@model EventsViewModel
+
+<h1>Расписание</h1>
+<div class="row mt-3 mb-2">
+		<div class="col-auto">
+			<label for="inputGroup">&nbsp;Выбор группы</label>
+			<select class="js-selectize" name="group" id="grSel" placeholder="Выберите группу">
+				@foreach (Group group in Model.AllGroups)
+				{
+					<option value="@group.id">@group.title</option>
+				}
+			</select>
+		<input id="buttonSearch" type="button" value="отправить" />
+		</div>
+	<div id="result" class="row mt-2 mb-2">
+		
+	</div>
+</div>
+<script>
+	$(document).ready(function () {
+		$('.js-selectize').selectize();
+	});
+	$('#buttonSearch').on('click', function () {
+		var search = document.getElementById("grSel").value;
+		$.ajax({
+			type: 'POST',
+			url: 'Week?group=' + search,
+			success: function (response) {
+				document.getElementById("result").innerHTML = response;
+
+			},
+			error: function (response) {
+				alert(response.responseText);
+			}
+		});
+	});
+</script>
+

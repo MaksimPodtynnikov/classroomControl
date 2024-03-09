@@ -1,0 +1,106 @@
+﻿@using classroomLibrary.ViewModels;
+@model List<City>
+@{
+	ViewData["Title"] = "Список городов";
+}
+<div class="d-flex">
+    <div style="margin-inline-end:5px">
+    <label for="site-search">Поиск:</label>
+        <input type="search" id="textsearch" name="city" />
+     <input class="btn btn-info"  type="button" id="buttonSearch" value="Найти" />
+    </div>
+<a class="btn btn-warning" asp-area="" asp-controller="Cities" asp-action="Create">Создать новый город</a>
+</div>
+@if(Model.Any()){
+    <div class="table-responsive">
+    <table border="1" class="table  tablesorter-dark" id="myTable">
+        <caption style="caption-side: top">Список городов</caption>
+    <thead>
+            <tr>
+                <th scope="col">Адрес</th>
+                <th scope="col">Город</th>
+                @if(User.IsInRole("Admin"))
+                {
+                    <th scope="col">Функции</th>
+                }
+            </tr>
+    </thead>
+        <tbody id="objList">
+            @{
+                foreach (City city in Model)
+                {
+                    @await Html.PartialAsync("Element/City", city)
+                }
+            }
+        </tbody>
+</table>
+</div>
+    <div id="pager" class="pager">
+        <form>
+            <img src="img/first.png" class="first" />
+            <img src="img/prev.png" class="prev" />
+            <input type="text" class="pagedisplay" />
+            <img src="img/next.png" class="next" />
+            <img src="img/last.png" class="last" />
+            <select class="pagesize">
+                <option selected="selected" value="2">2</option>
+                <option value="4">4</option>
+                <option value="6">6</option>
+                <option value="8">8</option>
+            </select>
+        </form>
+    </div>
+}
+else
+{
+<h3>
+    <small class="text-muted">Здесь будут ваши города</small>
+</h3>
+}
+<script>
+    $(document).ready(function () {
+        $("#myTable").tablesorter({
+            widgets: ['zebra'],
+            debug: true,
+            widthFixed: true
+        }).tablesorterPager({
+            size: 2,
+            container: $('#pager'),
+            positionFixed: false,
+            page: 1,
+            cssNext: '.next',
+            cssPrev: '.prev',
+            cssPrev: '.first',
+            cssPrev: '.last',
+        });
+    });
+    
+    async function deleteObj(id) {
+        const response = await fetch(`Cities/Delete/`+id, {
+            method: "DELETE",
+            headers: { "Accept": "application/json" }
+        });
+        if (response.ok === true) {
+            const user = await response.json();
+            document.getElementById(id).remove();
+        }
+        else {
+            const error = await response.json();
+            console.log(error.message);
+        }
+    }
+    $('#buttonSearch').on('click', function () {
+        var search = document.getElementById("textsearch").value;
+        $.ajax({
+            type: 'POST',
+            url: 'Cities/Search?search=' + search,
+            success: function (response) {
+                document.getElementById("objList").innerHTML = response;
+                
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    });
+</script>

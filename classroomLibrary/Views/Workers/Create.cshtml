@@ -1,0 +1,72 @@
+﻿@using classroomLibrary.Domain.Enum;
+@{
+	ViewData["Title"] = "Создание объекта";
+}
+
+@model WorkerViewModel
+
+<div asp-validation-summary="All" style="font-size:18px;" class="text-danger "></div>
+@using (Html.BeginForm("Create", "Workers", FormMethod.Post, new { enctype = "multipart/form-data", runat = "server" }))
+{
+	<p>
+		Введите имя: <br />
+		<input asp-for="name" required/><br />
+		Введите фамилию: <br />
+		<input asp-for="family" required/><br />
+		Введите отчество: <br />
+		<input asp-for="patronymic" /><br />
+		Введите почту: <br />
+        <input asp-for="mail" pattern="([A-z0-9_.\-]{1,})&#64;([A-z0-9_.\-]{1,})\.([A-z]{2,8})" /><br />
+		Введите телефон: <br />
+        <input asp-for="phone" id="online_phone" maxlength="50"
+               required="required"
+               pattern="\+7\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[\-]{0,1}\d{2}[\-]{0,1}\d{2}"
+               placeholder="+7(___)___-__-__" /><br />
+		Введите логин: <br />
+		<input asp-for="login" required/><br />
+		Введите пароль:<br />
+		<input asp-for="password" required/><br />
+		Введите 1с-id:<br />
+		<input asp-for="oneC_id" /><br />
+		Выберите должность: <br />
+        @Html.DropDownList("postId", new SelectList(Model.AllPosts, "id", "title"), new { required = true })<br />
+        Выберите роль: <br />
+        <select asp-for="role" asp-items="Html.GetEnumSelectList<Role>()" required></select>
+	</p>
+	<p><input type="submit" value="Создать" /></p>
+}
+<script type="text/javascript">
+    function setCursorPosition(pos, e) {
+        e.focus();
+        if (e.setSelectionRange) e.setSelectionRange(pos, pos);
+        else if (e.createTextRange) {
+            var range = e.createTextRange();
+            range.collapse(true);
+            range.moveEnd("character", pos);
+            range.moveStart("character", pos);
+            range.select()
+        }
+    }
+
+    function mask(e) {
+        //console.log('mask',e);
+        var matrix = this.placeholder,// .defaultValue
+            i = 0,
+            def = matrix.replace(/\D/g, ""),
+            val = this.value.replace(/\D/g, "");
+        def.length >= val.length && (val = def);
+        matrix = matrix.replace(/[_\d]/g, function (a) {
+            return val.charAt(i++) || "_"
+        });
+        this.value = matrix;
+        i = matrix.lastIndexOf(val.substr(-1));
+        i < matrix.length && matrix != this.placeholder ? i++ : i = matrix.indexOf("_");
+        setCursorPosition(i, this)
+    }
+    window.addEventListener("DOMContentLoaded", function () {
+        var input = document.querySelector("#online_phone");
+        input.addEventListener("input", mask, false);
+        input.focus();
+        setCursorPosition(3, input);
+    });
+</script>

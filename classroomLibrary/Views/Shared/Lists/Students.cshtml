@@ -1,0 +1,7 @@
+﻿@model List<Student>
+@{
+	foreach (Student student in Model)
+	{
+		@await Html.PartialAsync("Element/Student", student)
+	}
+}

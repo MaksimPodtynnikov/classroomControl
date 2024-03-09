@@ -1,0 +1,18 @@
+﻿@{
+	ViewData["Title"] = "Должность";
+}
+
+@model PostViewModel
+
+<h2>@Model.title</h2>
+<p>Прикреплена к @Model.department</p>
+<p>
+	<ul>
+		@{
+			foreach (Worker worker in Model.workers)
+			{
+				<li>@worker.getNameShort()</li>
+			}
+		}
+	</ul>
+</p>

@@ -1,0 +1,20 @@
+﻿@{
+	ViewData["Title"] = "Мероприятие";
+}
+
+@model EventViewModel
+
+<h2>@Model.title - @Model.type (@Model.classroom)</h2>
+<p>Ответственный: @Model.worker</p>
+<p>@Model.date.ToString("D") - @Model.getLesson()</p>
+<p>Группы:</p>
+<p>
+	<ul>
+		@{
+			foreach (EventGroup eventGroup in Model.eventGroups)
+			{
+				<li>@eventGroup.group</li>
+			}
+		}
+	</ul>
+</p>

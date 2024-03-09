@@ -1,0 +1,19 @@
+﻿@{
+	ViewData["Title"] = "Создание объекта";
+}
+
+@model DepartmentViewModel
+
+<div asp-validation-summary="All" style="font-size:18px;" class="text-danger "></div>
+@using (Html.BeginForm("Create", "Departments", FormMethod.Post, new { enctype = "multipart/form-data", runat = "server" }))
+{
+	<p>
+		Введите название отдела: <br/>
+		<input asp-for="title" required/>
+	</p>
+	<p>
+		Выберите город:<br />
+		@Html.DropDownList("cityId", new SelectList(Model.AllCities, "id", "title"), new { required = true })
+	</p>
+	<p><input type="submit" value="Создать" /></p>
+}

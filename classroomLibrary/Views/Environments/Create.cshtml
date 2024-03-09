@@ -1,0 +1,19 @@
+﻿@{
+	ViewData["Title"] = "Создание объекта";
+}
+
+@model EnvironmentViewModel
+
+<div asp-validation-summary="All" style="font-size:18px;" class="text-danger "></div>
+@using (Html.BeginForm("Create", "Environments", FormMethod.Post, new { enctype = "multipart/form-data", runat = "server" }))
+{
+	<p>
+		Введите название: <br/>
+		<input asp-for="title" required/>
+	</p>
+	<p>
+		Введите описание:<br />
+		<input asp-for="description"/>
+	</p>
+	<p><input type="submit" value="Создать" /></p>
+}

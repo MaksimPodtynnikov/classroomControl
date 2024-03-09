@@ -1,0 +1,28 @@
+﻿@{
+	ViewData["Title"] = "Отдел";
+}
+
+@model DepartmentViewModel
+
+<h2>@Model.title</h2>
+<p>Находится в городе @Model.city.title</p>
+<p>
+	<ul>
+		@{
+			foreach (Post post in Model.posts)
+			{
+				<li>@post.title</li>
+			}
+		}
+	</ul>
+</p>
+<p>
+	<ul>
+		@{
+			foreach (Classroom classroom in Model.classrooms)
+			{
+				<li>@classroom.title</li>
+			}
+		}
+	</ul>
+</p>

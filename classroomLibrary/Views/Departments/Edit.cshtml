@@ -1,0 +1,20 @@
+﻿@{
+	ViewData["Title"] = "Изменение объекта";
+}
+
+@model DepartmentViewModel
+
+<div asp-validation-summary="All" style="font-size:18px;" class="text-danger "></div>
+@using (Html.BeginForm("Edit", "Departments", FormMethod.Post, new { enctype = "multipart/form-data", runat = "server" }))
+{
+	<input type="hidden" asp-for="id" />
+	<p>Название:
+	<br />
+	<input asp-for="title" required/>
+	<br />
+	Город:
+	<br />
+		@Html.DropDownListFor(m => m.cityId, new SelectList(Model.AllCities, "id", "title"), new { required = true })
+	</p>
+	<p><input type="submit" value="Сохранить изменения" /></p>
+}

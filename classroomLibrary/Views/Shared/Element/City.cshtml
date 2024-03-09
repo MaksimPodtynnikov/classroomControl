@@ -1,0 +1,23 @@
+﻿@model City
+<tr id="@Model.id">
+    <td>
+        @Model.title
+    </td>
+    <td>
+        @Model.city
+    </td>
+        <td>
+            <a class="btn btn-warning" href="Cities/Details/@Model.id" style="margin-block-end:5px"><img src="~/img/details.png" /></a>
+        @if (User.IsInRole("Admin"))
+        {
+            <a class="btn btn-warning" href="Cities/Edit/@Model.id" style="margin-block-end:5px"><img src="~/img/edit.png" /></a>
+            <button class="btn btn-warning mt-sm-1 mt-md-0" id="delete_@Model.id" style="margin-block-end:5px"><img src="~/img/delete.png" /></button>
+        }
+        </td>
+</tr>
+@if (User.IsInRole("Admin"))
+{
+    <script>
+        document.getElementById("delete_@Model.id").addEventListener("click", async () => await deleteObj(@Model.id));
+    </script>
+}

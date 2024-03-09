@@ -1,0 +1,7 @@
+﻿@model List<Worker>
+@{
+	foreach (Worker worker in Model)
+	{
+		@await Html.PartialAsync("Element/Worker", worker)
+	}
+}

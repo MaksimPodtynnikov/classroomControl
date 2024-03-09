@@ -1,0 +1,19 @@
+﻿@{
+	ViewData["Title"] = "Создание объекта";
+}
+
+@model CityViewModel
+<div asp-validation-summary="All" style="font-size:18px;" class="text-danger "></div>
+@using (Html.BeginForm("Create", "Cities", FormMethod.Post, new { enctype = "multipart/form-data", runat = "server" }))
+{
+
+	<p>
+		Введите адрес: <br />
+		<input asp-for="@Model.title" required/>
+	</p>
+	<p>
+		Введите город:<br />
+		<input asp-for="@Model.city" required />
+	</p>
+	<p><input type="submit" value="Создать" /></p>
+}

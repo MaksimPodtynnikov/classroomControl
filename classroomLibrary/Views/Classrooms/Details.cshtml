@@ -1,0 +1,20 @@
+﻿@{
+	ViewData["Title"] = "Класс";
+}
+
+@model ClassViewModel
+
+<h2>Аудитория № @Model.title</h2>
+<img class="img-thumbnail" src="@Model.photo" alt="@Model.title" />
+<p>@Model.description <br/> Закреплена за @Model.department.title</p>
+<p>Вместительность: @Model.capacity</p>
+<p>
+	<ul>
+		@{
+			foreach (ClassEnvironment enviroment in Model.enviroments)
+			{
+				<li>@enviroment.enviroment</li>
+			}
+		}
+	</ul>
+</p>

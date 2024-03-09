@@ -1,0 +1,19 @@
+﻿@{
+	ViewData["Title"] = "Оборудование";
+}
+
+@model EnvironmentViewModel
+
+<h2>@Model.title</h2>
+<p>@Model.description</p>
+<p>Классы:</p>
+<p>
+	<ul>
+		@{
+			foreach (ClassEnvironment enviroment in Model.classes)
+			{
+				<li>@enviroment.classroom</li>
+			}
+		}
+	</ul>
+</p>

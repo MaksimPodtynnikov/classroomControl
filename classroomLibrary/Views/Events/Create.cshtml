@@ -1,0 +1,99 @@
+﻿@{
+	ViewData["Title"] = "Создание объекта";
+}
+
+@model EventViewModel
+
+<div asp-validation-summary="All" style="font-size:18px;" class="text-danger "></div>
+@using (Html.BeginForm("Create", "Events", FormMethod.Post, new { enctype = "multipart/form-data", runat = "server" }))
+{
+	<table>
+		<tbody>
+			<tr>
+				<td >
+					<input asp-for="fromTable" type="hidden" />
+		Введите название: <br/>
+		<input asp-for="title" required min="2"/><br />
+		Введите тип мероприятия:<br />
+		<input asp-for="type" required min="2"/><br />
+		Выберите дату проведения:<br />
+					@if (Model.fromTable && User.IsInRole("User"))
+					{
+						<input asp-for="date" required readonly type="date" />
+
+						<br />
+					}
+					else
+					{
+						<input asp-for="date" required  type="date" /><br />
+					}
+					Выберите время проведения занятия:<br />
+					@if (Model.fromTable && User.IsInRole("User"))
+					{
+						<input type="hidden" asp-for="lessonNumber" />
+						<select asp-for="lessonNumber" disabled>
+							<option value="1">8:30 - 10:05</option>
+							<option value="2">10:15 - 11:50</option>
+							<option value="3">12:10 - 13:45</option>
+							<option value="4">13:55 - 15:30</option>
+							<option value="5">15:50 - 17:25</option>
+							<option value="6">17:35 - 19:10</option>
+						</select>
+					}
+					else
+					{
+						<select asp-for="lessonNumber" >
+							<option value="1">8:30 - 10:05</option>
+							<option value="2">10:15 - 11:50</option>
+							<option value="3">12:10 - 13:45</option>
+							<option value="4">13:55 - 15:30</option>
+							<option value="5">15:50 - 17:25</option>
+							<option value="6">17:35 - 19:10</option>
+						</select>
+					}
+					<br />
+		Выберите сотрудника:<br />
+					@if (Model.fromTable && User.IsInRole("User"))
+					{
+						<input type="hidden" asp-for="workerId" />
+						@Html.DropDownListFor(c=>c.workerId, new SelectList(Model.AllWorkers != null ? Model.AllWorkers : Enumerable.Empty<Worker>(), "id", null), new { required = true, disabled=true })
+						<br />
+					}
+					else
+					{
+						@Html.DropDownListFor(c => c.workerId, new SelectList(Model.AllWorkers != null ? Model.AllWorkers : Enumerable.Empty<Worker>(), "id", null), new { required = true })
+						<br />
+					}
+		Выберите класс:<br />
+					@if (Model.fromTable && User.IsInRole("User"))
+					{
+						<input type="hidden" asp-for="classroomId" />
+						@Html.DropDownListFor(c => c.classroomId, new SelectList(Model.AllClassrooms != null ? Model.AllClassrooms : Enumerable.Empty<Classroom>(), "id", "title"), new { required = true, disabled = true })
+					}
+					else
+					{
+						@Html.DropDownListFor(c => c.classroomId, new SelectList(Model.AllClassrooms != null ? Model.AllClassrooms : Enumerable.Empty<Classroom>(), "id", "title"), new { required = true })
+					}
+				</td>
+				<td>
+
+					Группы, записанные на мероприятие:<br />
+					<select multiple class="js-selectize" asp-for="eventGroupsId" id="grSel" placeholder="Выберите группы">
+						@if(Model.AllGroups!=null)
+						@foreach (Group group in Model.AllGroups)
+						{
+							<option value="@group.id">@group.title</option>
+						}
+					</select>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<p><input type="submit" value="Создать" /></p>
+}
+
+<script>
+	$(document).ready(function () {
+		$('.js-selectize').selectize();
+	});
+</script>

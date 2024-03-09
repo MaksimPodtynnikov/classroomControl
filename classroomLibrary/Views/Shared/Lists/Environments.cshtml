@@ -1,0 +1,7 @@
+﻿@model List<Enviroment>
+@{
+	foreach (Enviroment enviroment in Model)
+	{
+		@await Html.PartialAsync("Element/Enviroment", enviroment)
+	}
+}
