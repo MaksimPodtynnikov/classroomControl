@@ -7,8 +7,8 @@
 * бронирование аудиторий преподавателями, а также возможность отмены бронирования модераторами
 ## Скриншоты
 ### расписание
-[!скрин](https://github.com/MaksimPodtynnikov/imgs/blob/main/scr1.png)
+![скрин](https://github.com/MaksimPodtynnikov/imgs/blob/main/scr1.png)
 ### Аудитроный фонд
-[!скрин](https://github.com/MaksimPodtynnikov/imgs/blob/main/scr2.png)
+![скрин](https://github.com/MaksimPodtynnikov/imgs/blob/main/scr2.png)
 ### Авторизация
-[!скрин](https://github.com/MaksimPodtynnikov/imgs/blob/main/scr3.png)
+![скрин](https://github.com/MaksimPodtynnikov/imgs/blob/main/scr3.png)
